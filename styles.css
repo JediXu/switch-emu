@@ -1,0 +1,637 @@
+.system-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin: 20px auto;
+    padding: 15px;
+    background: #f0f0f0;
+    position: relative;
+    max-width: 1000px;
+}
+
+.black-box {
+    width: 80%;
+    height: 250px;
+    border: 3px solid #333;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    margin-bottom: 60px;
+    box-sizing: border-box;
+}
+
+.terminals-container {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.terminal {
+    width: 280px;
+    height: 150px;
+    border: 2px solid #333;
+    padding: 15px;
+    border-radius: 10px;
+    position: relative;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.terminal h3 {
+    margin: 0;
+    padding: 10px 0;
+}
+
+/* IO端口样式 */
+.io-ports {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* 黑盒IO端口 */
+.port {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -8px;
+    transform: translateX(-50%);
+}
+
+.red-port { 
+    background: rgba(255, 0, 0, 0.8);
+    left: 25%;
+}
+
+.blue-port { 
+    background: rgba(0, 0, 255, 0.8);
+    left: 50%;
+}
+
+.yellow-port { 
+    background: rgba(255, 255, 0, 0.8);
+    left: 75%;
+}
+
+/* 管道样式 */
+.pipe {
+    width: 3px;
+    height: 40px;
+    background: #666;
+}
+
+.pipe-in {
+    width: 2px;
+    background: #444;
+}
+
+.pipe-out {
+    width: 2px;
+    background: #888;
+}
+
+/* 终端IO端口 */
+.terminal .io-port {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+/* 为每个终端的IO端口设置对应颜色 */
+#redTerminal .io-port {
+    background: rgba(255, 0, 0, 0.8);
+}
+
+#blueTerminal .io-port {
+    background: rgba(0, 0, 255, 0.8);
+}
+
+#yellowTerminal .io-port {
+    background: rgba(255, 255, 0, 0.8);
+}
+
+/* 修改连接线样式 */
+.connection-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.connection-line {
+    position: absolute;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.3);
+    transform-origin: center top;
+}
+
+/* 红色连接线 - 从端口中心开始 */
+.red-line {
+    left: calc(25% + 8px); /* 25%位置加上端口半径(16px/2) */
+    height: var(--line-height, 100px);
+    transform: translateX(-50%);
+}
+
+/* 蓝色连接线 - 从端口中心开始 */
+.blue-line {
+    left: calc(50% + 8px); /* 50%位置加上端口半径 */
+    height: var(--line-height, 100px);
+    transform: translateX(-50%);
+}
+
+/* 黄色连接线 - 从端口中心开始 */
+.yellow-line {
+    left: calc(75% + 8px); /* 75%位置加上端口半径 */
+    height: var(--line-height, 100px);
+    transform: translateX(-50%);
+}
+
+/* 其他样式保持不变 */
+.control-panel {
+    text-align: center;
+    margin: 20px;
+}
+
+.control-panel button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.slider-group {
+    margin: 12px 0;
+}
+
+.counters {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 小球动画样式 */
+.ball {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+}
+
+/* 为每个终端设置不同的背景色 */
+#redTerminal { 
+    background-color: rgba(255, 0, 0, 0.1); 
+}
+
+#blueTerminal { 
+    background-color: rgba(0, 0, 255, 0.1); 
+}
+
+#yellowTerminal { 
+    background-color: rgba(255, 255, 0, 0.1); 
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .black-box-section,
+    .black-box,
+    .black-box-controls {
+        width: 90%;
+    }
+
+    .terminals-container {
+        padding: 0;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .terminal-group {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+.terminal-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.terminal-group:first-child {
+    margin-right: auto;
+}
+
+.terminal-group:last-child {
+    margin-left: auto;
+}
+
+.terminal-controls {
+    width: 280px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.sliders {
+    margin-bottom: 15px;
+}
+
+.slider-group label {
+    width: 80px;
+    margin-right: 10px;
+}
+
+.slider-group input[type="range"] {
+    flex: 1;
+    margin-right: 5px;
+}
+
+.slider-value {
+    min-width: 35px;
+}
+
+.control-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-item input[type="range"] {
+    flex: 1;
+    margin-right: 5px;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    margin-top: auto;
+}
+
+/* 发出统计行 */
+.emit-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 5px;
+}
+
+/* 接收统计行 */
+.receive-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.receive-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+}
+
+/* 统计数值显示 */
+.yellow-count,
+.blue-count,
+.red-count,
+.receive-count {
+    display: inline-block;
+    min-width: 36px;
+    text-align: right;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 外部统计项样式 */
+.stats-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+
+.stats-item span {
+    min-width: 40px;
+    text-align: right;
+    font-weight: bold;
+}
+
+/* 新增和修改的样式 */
+.black-box-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.black-box-controls {
+    width: 80%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 60px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-item label {
+    width: 80px;
+    text-align: right;
+}
+
+.control-item select,
+.control-item input[type="range"] {
+    width: 150px;
+}
+
+.stats-group {
+    display: flex;
+    gap: 30px;
+}
+
+.stats-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.stats-item span {
+    display: inline-block;
+    min-width: 100px;
+    text-align: left;
+    margin-left: 10px;
+}
+
+/* 为带括号的数值预留更多空间 */
+#currentBuffer,
+#overflowCount {
+    min-width: 150px;
+}
+
+/* 缓存结构样式 */
+.buffer-structure {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}
+
+/* 修改和新增共享缓存模式的样式 */
+.shared-buffer {
+    width: 50%;
+    height: 100px;
+    border: 2px solid #666;
+    border-radius: 8px;
+    position: relative;
+    margin: 40px 0;
+}
+
+.buffer-content {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+}
+
+.buffer-title {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+/* 修改出端口缓存模式的布局样式 */
+.separate-mode {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.separate-buffers {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    padding: 10px;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.buffer {
+    width: 120px; /* 固定宽度而不是百分比 */
+    height: 100px;
+    border: 2px solid #666;
+    border-radius: 8px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 为每个缓存区添加标题 */
+.buffer::before {
+    content: attr(data-color);
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0 10px;
+    color: #333;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* 调整缓存区颜色和透明度 */
+.red-buffer { 
+    border-color: rgba(255, 0, 0, 0.5);
+    background: rgba(255, 0, 0, 0.05);
+}
+
+.blue-buffer { 
+    border-color: rgba(0, 0, 255, 0.5);
+    background: rgba(0, 0, 255, 0.05);
+}
+
+.yellow-buffer { 
+    border-color: rgba(255, 255, 0, 0.5);
+    background: rgba(255, 255, 0, 0.05);
+}
+
+/* 响应式布局调整 */
+@media (max-width: 768px) {
+    .separate-buffers {
+        width: 95%;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .buffer {
+        width: 80%;
+        max-width: 200px;
+    }
+}
+
+/* 统一缓存区样式 */
+.shared-buffer,
+.buffer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.buffer-content {
+    width: 95%;
+    height: 90%;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 调整终端容器布局 */
+.terminals-container {
+    width: 90%;
+    gap: 15px;
+    margin-top: -20px;
+}
+
+/* 调整终端组布局 */
+.terminal-group {
+    gap: 10px;
+}
+
+/* 调整终端控制面板布局 */
+.terminal-controls {
+    padding: 10px;
+    margin-top: 5px;
+}
+
+/* 响应式布局调整 */
+@media (max-width: 1200px) {
+    .system-container {
+        padding: 10px;
+        gap: 20px;
+    }
+
+    .black-box-section {
+        width: 95%;
+    }
+
+    .black-box-controls {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .terminals-container {
+        width: 95%;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .terminal-group {
+        margin-bottom: 10px;
+    }
+}
+
+/* 修改控制项和统计项的共同样式 */
+.control-item,
+.stats-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;  /* 统一字号 */
+    font-family: Arial, sans-serif;  /* 统一字体 */
+}
+
+/* 统一标签样式 */
+.control-item label,
+.stats-item {
+    width: 80px;  /* 统一宽度 */
+    text-align: right;  /* 统一右对齐 */
+    font-weight: normal;  /* 统一字重 */
+}
+
+/* 统一数值区域样式 */
+.control-item select,
+.control-item input[type="range"],
+.stats-item span {
+    display: inline-block;
+    width: 150px;  /* 统一宽度 */
+    margin-left: 10px;
+}
+
+/* 为带括号的数值预留更多空间，但保持左侧对齐位置一致 */
+#currentBuffer,
+#overflowCount {
+    min-width: 150px;
+    text-align: left;
+}
+
+/* 移除之前的不一致样式 */
+.stats-item {
+    white-space: nowrap;
+}
+
+.stats-item span {
+    text-align: left;
+} 

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交换模拟器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="control-panel">
+        <button id="resetBtn" 
+                aria-label="重置系统"
+                title="点击重置系统到初始状态">复位</button>
+        <button id="toggleBtn" 
+                aria-label="运行/暂停系统"
+                title="点击开始或暂停系统运行">运行</button>
+    </div>
+
+    <div class="system-container">
+        <!-- 修改黑盒部分的结构 -->
+        <div class="black-box-section">
+            <div class="black-box-controls">
+                <div class="control-group">
+                    <div class="control-item">
+                        <label for="modeSelect">工作模式：</label>
+                        <select id="modeSelect" 
+                                aria-label="黑盒工作模式选择"
+                                title="选择黑盒的工作模式">
+                            <option value="shared">共享缓存</option>
+                            <option value="separate">出端口缓存</option>
+                        </select>
+                    </div>
+                    <div class="control-item">
+                        <label for="bufferDepth">缓存深度：</label>
+                        <input type="range" 
+                               id="bufferDepth" 
+                               min="1" max="50" 
+                               value="10" 
+                               aria-label="缓存深度控制"
+                               title="调整缓存区可容纳的小球数量"
+                               class="buffer-depth-slider">
+                    </div>
+                </div>
+                
+                <div class="stats-group">
+                    <div class="stats-column">
+                        <div class="stats-item">接收数：<span id="totalReceived">0</span></div>
+                        <div class="stats-item">发出数：<span id="totalSent">0</span></div>
+                    </div>
+                    <div class="stats-column">
+                        <div class="stats-item">缓存数：<span id="currentBuffer">0</span></div>
+                        <div class="stats-item">溢出数：<span id="overflowCount">0</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="black-box">
+                <!-- 修改共享缓存模式的结构 -->
+                <div class="buffer-structure shared-mode">
+                    <div class="shared-buffer">
+                        <div class="buffer-title">共享缓存区</div>
+                        <div class="buffer-content"></div>
+                    </div>
+                </div>
+
+                <!-- 出端口缓存模式的结构 -->
+                <div class="buffer-structure separate-mode hidden">
+                    <div class="separate-buffers">
+                        <div class="buffer red-buffer">
+                            <div class="buffer-title">红色缓存</div>
+                            <div class="buffer-content"></div>
+                        </div>
+                        <div class="buffer blue-buffer">
+                            <div class="buffer-title">蓝色缓存</div>
+                            <div class="buffer-content"></div>
+                        </div>
+                        <div class="buffer yellow-buffer">
+                            <div class="buffer-title">黄色缓存</div>
+                            <div class="buffer-content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IO接口 -->
+                <div class="io-ports">
+                    <div class="port red-port"></div>
+                    <div class="port blue-port"></div>
+                    <div class="port yellow-port"></div>
+                </div>
+                
+                <!-- 添加连接线 -->
+                <div class="connection-lines">
+                    <div class="connection-line red-line"></div>
+                    <div class="connection-line blue-line"></div>
+                    <div class="connection-line yellow-line"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 终端容器 -->
+        <div class="terminals-container">
+            <div class="terminal-group">
+                <div class="terminal" id="redTerminal">
+                    <div class="io-port"></div>
+                    <h3>红色终端</h3>
+                    <div class="stats-container">
+                        <div class="emit-stats">
+                            <span>Tx-Y:<span class="yellow-count">0</span></span>
+                            <span>Tx-B:<span class="blue-count">0</span></span>
+                        </div>
+                        <div class="receive-stats">
+                            <span>Rx-R:<span class="receive-count">0</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="terminal-controls">
+                    <div class="slider-group">
+                        <label for="redSpeedSlider">发出速度：</label>
+                        <input type="range" 
+                               id="redSpeedSlider" 
+                               class="speed-slider" 
+                               min="0" max="10" 
+                               value="1"
+                               step="1"
+                               aria-label="发出速度控制"
+                               title="调整小球发出的速度">
+                    </div>
+                    <div class="slider-group">
+                        <label for="redRatioSlider">颜色比例：</label>
+                        <input type="range" 
+                               id="redRatioSlider" 
+                               class="ratio-slider" 
+                               min="0" max="100" 
+                               value="50"
+                               aria-label="颜色比例控制"
+                               title="调整两种颜色小球的发射比例">
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal-group">
+                <div class="terminal" id="blueTerminal">
+                    <div class="io-port"></div>
+                    <h3>蓝色终端</h3>
+                    <div class="stats-container">
+                        <div class="emit-stats">
+                            <span>Tx-R:<span class="red-count">0</span></span>
+                            <span>Tx-Y:<span class="yellow-count">0</span></span>
+                        </div>
+                        <div class="receive-stats">
+                            <span>Rx-B:<span class="receive-count">0</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="terminal-controls">
+                    <div class="slider-group">
+                        <label for="blueSpeedSlider">发出速度：</label>
+                        <input type="range" 
+                               id="blueSpeedSlider" 
+                               class="speed-slider" 
+                               min="0" max="10" 
+                               value="1"
+                               step="1"
+                               aria-label="发出速度控制"
+                               title="调整小球发出的速度">
+                    </div>
+                    <div class="slider-group">
+                        <label for="blueRatioSlider">颜色比例：</label>
+                        <input type="range" 
+                               id="blueRatioSlider" 
+                               class="ratio-slider" 
+                               min="0" max="100" 
+                               value="50"
+                               aria-label="颜色比例控制"
+                               title="调整两种颜色小球的发射比例">
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal-group">
+                <div class="terminal" id="yellowTerminal">
+                    <div class="io-port"></div>
+                    <h3>黄色终端</h3>
+                    <div class="stats-container">
+                        <div class="emit-stats">
+                            <span>Tx-R:<span class="red-count">0</span></span>
+                            <span>Tx-B:<span class="blue-count">0</span></span>
+                        </div>
+                        <div class="receive-stats">
+                            <span>Rx-Y:<span class="receive-count">0</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="terminal-controls">
+                    <div class="slider-group">
+                        <label for="yellowSpeedSlider">发出速度：</label>
+                        <input type="range" 
+                               id="yellowSpeedSlider" 
+                               class="speed-slider" 
+                               min="0" max="10" 
+                               value="1"
+                               step="1"
+                               aria-label="发出速度控制"
+                               title="调整小球发出的速度">
+                    </div>
+                    <div class="slider-group">
+                        <label for="yellowRatioSlider">颜色比例：</label>
+                        <input type="range" 
+                               id="yellowRatioSlider" 
+                               class="ratio-slider" 
+                               min="0" max="100" 
+                               value="50"
+                               aria-label="颜色比例控制"
+                               title="调整两种颜色小球的发射比例">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
